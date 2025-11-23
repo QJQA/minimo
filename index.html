@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MiniMo 微行动</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+            min-height: 100vh;
+        }
+
+        /* 页面切换 */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            padding: 40px 0 30px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 300;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .slogan {
+            font-size: 14px;
+            color: #718096;
+            font-weight: 300;
+        }
+
+        /* 主题切换 */
+        .theme-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .theme-btn {
+            padding: 10px 24px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 14px;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-btn:hover {
+            background: #f7fafc;
+        }
+
+        .theme-btn.active {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+
+        /* 主打卡区域 */
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .daily-task {
+            font-size: 22px;
+            color: #2d3748;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .check-in-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 50px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .check-in-btn:active {
+            transform: scale(0.95);
+        }
+
+        .check-in-btn.checked {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            box-shadow: 0 5px 15px rgba(132, 250, 176, 0.4);
+        }
+
+        /* 表单区域 */
+        .form-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .form-section.hidden {
+            display: none;
+        }
+
+        .form-title {
+            font-size: 16px;
+            color: #718096;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .emoji-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .emoji-btn {
+            font-size: 32px;
+            background: #f7fafc;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .emoji-btn:hover {
+            background: #edf2f7;
+        }
+
+        .emoji-btn.selected {
+            border-color: #667eea;
+            background: #e6fffa;
+            transform: scale(1.1);
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .text-input::placeholder {
+            color: #cbd5e0;
+        }
+
+        textarea.text-input {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .duration-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .duration-btn {
+            padding: 12px;
+            background: #f7fafc;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .duration-btn:hover {
+            background: #edf2f7;
+        }
+
+        .duration-btn.selected {
+            border-color: #667eea;
+            background: #e6fffa;
+            color: #667eea;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .save-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 底部导航 */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            padding: 5px 20px;
+            color: #a0aec0;
+            transition: color 0.2s;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .nav-text {
+            font-size: 12px;
+        }
+
+        /* 记录列表 */
+        .records-list {
+            padding-bottom: 80px;
+        }
+
+        .record-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .record-date {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .record-location {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .record-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .record-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .record-item-label {
+            color: #a0aec0;
+            margin-right: 10px;
+            min-width: 80px;
+        }
+
+        /* 报告页面 Tab */
+        .report-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 30px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 14px;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+
+        .time-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .time-selector select {
+            padding: 8px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #4a5568;
+            background: white;
+            cursor: pointer;
+        }
+
+        .time-selector select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* 周报告 */
+        .report-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .report-title {
+            font-size: 20px;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .report-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f7fafc;
+        }
+
+        .report-stat:last-child {
+            border-bottom: none;
+        }
+
+        .report-label {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .report-value {
+            font-size: 24px;
+            font-weight: 500;
+            color: #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0aec0;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* 设置页面 */
+        .settings-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f7fafc;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            font-size: 14px;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .faq-answer {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f7fafc;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e0;
+            transition: .3s;
+            border-radius: 28px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        .danger-btn {
+            width: 100%;
+            padding: 15px;
+            background: #fc8181;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        /* 提示消息 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 打卡页面 -->
+        <div id="checkInPage" class="page active">
+            <div class="header">
+                <div class="logo">MiniMo 微行动</div>
+            </div>
+
+            <div class="theme-switcher">
+                <button class="theme-btn active" data-theme="move" onclick="switchTheme('move')">
+                    <span>🏃</span>
+                    <span>运动</span>
+                </button>
+                <button class="theme-btn" data-theme="read" onclick="switchTheme('read')">
+                    <span>📖</span>
+                    <span>阅读</span>
+                </button>
+            </div>
+
+            <div class="main-card">
+                <div class="daily-task" id="dailyTask">穿上运动鞋<br>出门 5 分钟</div>
+                <button class="check-in-btn" id="checkInBtn" onclick="handleCheckIn()">
+                    <span id="checkInText">我出门了</span>
+                </button>
+            </div>
+
+            <div class="form-section hidden" id="formSection">
+                <div class="form-title">如果你愿意，可以记录一下 ☺️</div>
+
+                <!-- 运动主题表单 -->
+                <div id="moveForm">
+                    <div class="form-group">
+                        <label class="form-label">今天做了什么</label>
+                        <input type="text" class="text-input" id="activity" placeholder="散步、跑步、骑车..." maxlength="50" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">用时多久（可选）</label>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="number" class="text-input" id="duration" placeholder="请填写分钟数" min="1" max="9999" style="flex: 1;">
+                            <span style="color: #718096; font-size: 14px; min-width: 40px;">分钟</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 阅读主题表单 -->
+                <div id="readForm" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">今天看了什么书</label>
+                        <input type="text" class="text-input" id="bookName" placeholder="书名..." maxlength="100" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">看了多少页（可选）</label>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="number" class="text-input" id="pages" placeholder="请填写页数" min="1" max="9999" style="flex: 1;">
+                            <span style="color: #718096; font-size: 14px; min-width: 40px;">页</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">今天想说的（可选）</label>
+                    <textarea class="text-input" id="notes" placeholder="如果有什么想记录的...（可以不写）" maxlength="500"></textarea>
+                    <div style="text-align: right; font-size: 12px; color: #cbd5e0; margin-top: 5px;">
+                        <span id="charCount">0</span>/500
+                    </div>
+                </div>
+
+                <button class="save-btn" onclick="saveRecord()">保存</button>
+            </div>
+        </div>
+
+        <!-- 记录列表页面 -->
+        <div id="recordsPage" class="page">
+            <div class="header">
+                <div class="logo">我的记录</div>
+            </div>
+            <div class="records-list" id="recordsList"></div>
+        </div>
+
+        <!-- 周报告页面 -->
+        <div id="reportPage" class="page">
+            <div class="header">
+                <div class="logo">报告</div>
+            </div>
+
+            <div class="theme-switcher">
+                <button class="theme-btn active" data-report-theme="all" onclick="switchReportTheme('all')">
+                    <span>📊</span>
+                    <span>全部</span>
+                </button>
+                <button class="theme-btn" data-report-theme="move" onclick="switchReportTheme('move')">
+                    <span>🏃</span>
+                    <span>运动</span>
+                </button>
+                <button class="theme-btn" data-report-theme="read" onclick="switchReportTheme('read')">
+                    <span>📖</span>
+                    <span>阅读</span>
+                </button>
+            </div>
+            
+            <div class="report-tabs">
+                <button class="tab-btn active" data-tab="week" onclick="switchReportTab('week')">本周</button>
+                <button class="tab-btn" data-tab="month" onclick="switchReportTab('month')">本月</button>
+            </div>
+
+            <div class="time-selector" id="timeSelector" style="display: none;">
+                <select id="yearSelect" onchange="updateMonthReport()"></select>
+                <select id="monthSelect" onchange="updateMonthReport()"></select>
+            </div>
+
+            <div class="report-section" id="reportContent"></div>
+        </div>
+
+        <!-- 设置页面 -->
+        <div id="settingsPage" class="page">
+            <div class="header">
+                <div class="logo">设置</div>
+            </div>
+
+            <div class="settings-section">
+                <div class="section-title">常见问题</div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">📱 我的数据保存在哪里？</div>
+                    <div class="faq-answer">
+                        你的所有记录都保存在手机浏览器的本地存储中。只要不清除浏览器数据/缓存，记录就会一直保留。目前暂不提供云端同步功能。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">🔄 换手机后数据会丢失吗？</div>
+                    <div class="faq-answer">
+                        是的，因为数据保存在当前浏览器中。如果换手机或换浏览器，之前的记录无法自动同步。建议定期截图保存重要记录，未来我们会考虑添加云端备份功能。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">⏰ 每天必须打卡吗？</div>
+                    <div class="faq-answer">
+                        完全不必！MiniMo 的理念是"Let it flow"，不强制打卡。想出门就记录，不想动也完全 OK。我们不会催促你，也不会显示"连续天数"来制造压力。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">📊 为什么没有"连续打卡天数"？</div>
+                    <div class="faq-answer">
+                        因为"断签"会带来挫败感。MiniMo 相信降低阻力比意志力更重要，我们只呈现数据，不评判你的表现。出门 1 次和 100 次，都值得被记录。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">✍️ 可以修改或删除记录吗？</div>
+                    <div class="faq-answer">
+                        目前暂不支持修改单条记录。如果需要重新开始，可以使用下方的"清除所有数据"功能。未来版本会考虑添加编辑功能。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">🎯 MiniMo 和其他运动 App 有什么不同？</div>
+                    <div class="faq-answer">
+                        大多数 App 要求你设定目标、制定计划、完成打卡。MiniMo 恰恰相反——我们不谈目标，不做计划，只是降低"出门"这个动作的阻力。适合那些"有愿望没力气"的人。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">💝 MiniMo 是什么意思？</div>
+                    <div class="faq-answer">
+                        MiniMo 是 Mini Movement 的缩写，中文名"微行动"。我们相信，微小的行动积累起来，水到渠成。
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="section-title">数据管理</div>
+                <button class="danger-btn" onclick="clearAllData()">清除所有数据</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="nav-bar">
+        <div class="nav-item active" data-page="checkInPage">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-text">打卡</div>
+        </div>
+        <div class="nav-item" data-page="recordsPage">
+            <div class="nav-icon">📝</div>
+            <div class="nav-text">记录</div>
+        </div>
+        <div class="nav-item" data-page="reportPage">
+            <div class="nav-icon">📊</div>
+            <div class="nav-text">报告</div>
+        </div>
+        <div class="nav-item" data-page="settingsPage">
+            <div class="nav-icon">⚙️</div>
+            <div class="nav-text">设置</div>
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // 数据管理
+        let currentTheme = 'move'; // 当前主题：move 或 read
+        let currentRecord = {
+            date: '',
+            theme: 'move',
+            // 运动相关
+            activity: '',
+            duration: '',
+            // 阅读相关
+            bookName: '',
+            pages: '',
+            // 共用
+            notes: ''
+        };
+
+        // 统一的日期格式化函数 - 返回 YYYY-MM-DD 格式
+        function formatDateString(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // 解析日期字符串为 Date 对象
+        function parseDate(dateStr) {
+            // 尝试直接解析
+            let date = new Date(dateStr);
+            if (!isNaN(date.getTime())) {
+                return date;
+            }
+            
+            // 尝试解析中文格式 YYYY/M/D
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+                if (parts[0].length === 4) {
+                    // YYYY/M/D
+                    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                } else {
+                    // M/D/YYYY
+                    return new Date(parseInt(parts[2]), parseInt(parts[0]) - 1, parseInt(parts[1]));
+                }
+            }
+            
+            // 默认返回当前日期
+            return new Date();
+        }
+
+        // 显示用的日期格式化 - 返回 M月D日 或 YYYY年M月D日
+        function formatDateDisplay(dateStr, includeYear = false) {
+            const date = parseDate(dateStr);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            if (includeYear) {
+                return `${year}年${month}月${day}日`;
+            }
+            return `${month}月${day}日`;
+        }
+
+        // 切换主题
+        function switchTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('currentTheme', theme);
+            
+            // 更新主题按钮状态
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+            
+            // 更新任务文本和按钮文本
+            const dailyTask = document.getElementById('dailyTask');
+            const checkInText = document.getElementById('checkInText');
+            
+            if (theme === 'move') {
+                dailyTask.innerHTML = '穿上运动鞋<br>出门 5 分钟';
+                checkInText.textContent = '我出门了';
+            } else {
+                dailyTask.innerHTML = '打开书本<br>看上两页';
+                checkInText.textContent = '我读了';
+            }
+            
+            // 切换表单
+            const moveForm = document.getElementById('moveForm');
+            const readForm = document.getElementById('readForm');
+            
+            if (theme === 'move') {
+                moveForm.style.display = 'block';
+                readForm.style.display = 'none';
+            } else {
+                moveForm.style.display = 'none';
+                readForm.style.display = 'block';
+                // 尝试加载上次阅读的书名
+                loadLastBookName();
+            }
+            
+            // 重置打卡状态和表单
+            const btn = document.getElementById('checkInBtn');
+            btn.classList.remove('checked');
+            btn.innerHTML = `<span id="checkInText">${theme === 'move' ? '我出门了' : '我读了'}</span>`;
+            document.getElementById('formSection').classList.add('hidden');
+            resetForm();
+            
+            // 重新检查今日打卡
+            checkTodayCheckIn();
+        }
+
+        // 加载上次阅读的书名
+        function loadLastBookName() {
+            const records = getRecords();
+            const readRecords = records.filter(r => r.theme === 'read' && r.bookName);
+            
+            if (readRecords.length > 0) {
+                // 获取最近3条记录
+                const recentBooks = readRecords.slice(0, 3);
+                const lastBook = recentBooks[0].bookName;
+                
+                // 如果最近都在读同一本书，自动填充
+                const sameBook = recentBooks.every(r => r.bookName === lastBook);
+                if (sameBook) {
+                    const bookInput = document.getElementById('bookName');
+                    bookInput.placeholder = `上次在读《${lastBook}》`;
+                }
+            }
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 恢复上次选择的主题
+            const savedTheme = localStorage.getItem('currentTheme') || 'move';
+            currentTheme = savedTheme;
+            switchTheme(savedTheme);
+            
+            checkTodayCheckIn();
+            loadRecords();
+            generateWeeklyReport();
+            
+            // 绑定导航栏点击事件
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const pageId = this.getAttribute('data-page');
+                    showPage(pageId);
+                });
+            });
+
+            // 绑定字符计数
+            const notesInput = document.getElementById('notes');
+            const charCount = document.getElementById('charCount');
+            notesInput.addEventListener('input', function() {
+                charCount.textContent = this.value.length;
+            });
+        });
+
+        // 页面切换
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+
+            if (pageId === 'recordsPage') {
+                loadRecords();
+            } else if (pageId === 'reportPage') {
+                // 根据当前 tab 类型生成报告
+                if (currentReportType === 'week') {
+                    generateWeeklyReport();
+                } else {
+                    initTimeSelector();
+                    updateMonthReport();
+                }
+            }
+        }
+
+        // 检查今天是否已打卡
+        function checkTodayCheckIn() {
+            const today = formatDateString(new Date());
+            const records = getRecords();
+            const todayRecord = records.find(r => r.date === today && r.theme === currentTheme);
+            
+            const btn = document.getElementById('checkInBtn');
+            const checkInText = document.getElementById('checkInText');
+            
+            if (todayRecord) {
+                btn.classList.add('checked');
+                checkInText.textContent = currentTheme === 'move' ? '今天已出门 ✓' : '今天已阅读 ✓';
+                document.getElementById('formSection').classList.remove('hidden');
+            }
+        }
+
+        // 打卡
+        function handleCheckIn() {
+            const btn = document.getElementById('checkInBtn');
+            if (btn.classList.contains('checked')) {
+                return;
+            }
+
+            const today = formatDateString(new Date());
+            currentRecord.date = today;
+            currentRecord.theme = currentTheme;
+
+            btn.classList.add('checked');
+            const checkInText = document.getElementById('checkInText');
+            checkInText.textContent = currentTheme === 'move' ? '今天已出门 ✓' : '今天已阅读 ✓';
+            
+            document.getElementById('formSection').classList.remove('hidden');
+            showToast(currentTheme === 'move' ? '真好 ☺️' : '读了就好 📖');
+        }
+
+        // 保存记录
+        function saveRecord() {
+            // 验证必填字段
+            if (currentTheme === 'move') {
+                const activity = document.getElementById('activity').value.trim();
+                if (!activity) {
+                    showToast('请填写今天做了什么运动');
+                    return;
+                }
+                currentRecord.activity = activity;
+                currentRecord.duration = document.getElementById('duration').value;
+                // 清空阅读相关字段
+                currentRecord.bookName = '';
+                currentRecord.pages = '';
+            } else {
+                const bookName = document.getElementById('bookName').value.trim();
+                if (!bookName) {
+                    showToast('请填写书名');
+                    return;
+                }
+                currentRecord.bookName = bookName;
+                currentRecord.pages = document.getElementById('pages').value;
+                // 清空运动相关字段
+                currentRecord.activity = '';
+                currentRecord.duration = '';
+            }
+            
+            currentRecord.notes = document.getElementById('notes').value;
+
+            const records = getRecords();
+            const existingIndex = records.findIndex(r => r.date === currentRecord.date && r.theme === currentRecord.theme);
+            
+            if (existingIndex >= 0) {
+                records[existingIndex] = {...currentRecord};
+            } else {
+                records.push({...currentRecord});
+            }
+
+            localStorage.setItem('minimoRecords', JSON.stringify(records));
+            showToast('记录已保存');
+
+            // 重置表单
+            resetForm();
+        }
+
+        // 重置表单
+        function resetForm() {
+            document.getElementById('activity').value = '';
+            document.getElementById('duration').value = '';
+            document.getElementById('bookName').value = '';
+            document.getElementById('pages').value = '';
+            document.getElementById('notes').value = '';
+            document.getElementById('charCount').textContent = '0';
+        }
+
+        // 获取所有记录
+        function getRecords() {
+            const records = localStorage.getItem('minimoRecords');
+            return records ? JSON.parse(records) : [];
+        }
+
+        // 加载记录列表
+        function loadRecords() {
+            const records = getRecords();
+            const container = document.getElementById('recordsList');
+
+            if (records.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🌱</div>
+                        <div>还没有记录<br>出门走走吧</div>
+                    </div>
+                `;
+                return;
+            }
+
+            records.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+
+            container.innerHTML = records.map(record => `
+                <div class="record-card">
+                    <div class="record-header">
+                        <div class="record-date">
+                            ${record.theme === 'read' ? '📖' : '🏃'} ${formatDateDisplay(record.date, true)}
+                        </div>
+                    </div>
+                    <div class="record-content">
+                        ${record.theme === 'move' && record.activity ? `
+                            <div class="record-item">
+                                <span class="record-item-label">做了什么</span>
+                                <span>${record.activity}</span>
+                            </div>
+                        ` : ''}
+                        ${record.theme === 'move' && record.duration ? `
+                            <div class="record-item">
+                                <span class="record-item-label">时长</span>
+                                <span>${record.duration}分钟</span>
+                            </div>
+                        ` : ''}
+                        ${record.theme === 'read' && record.bookName ? `
+                            <div class="record-item">
+                                <span class="record-item-label">阅读书目</span>
+                                <span>《${record.bookName}》</span>
+                            </div>
+                        ` : ''}
+                        ${record.theme === 'read' && record.pages ? `
+                            <div class="record-item">
+                                <span class="record-item-label">页数</span>
+                                <span>${record.pages}页</span>
+                            </div>
+                        ` : ''}
+                        ${record.notes ? `
+                            <div class="record-item">
+                                <span class="record-item-label">笔记</span>
+                                <span>${record.notes}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 当前报告类型
+        let currentReportType = 'week';
+        let currentReportTheme = 'all'; // 报告筛选主题：all, move, read
+
+        // 切换报告主题筛选
+        function switchReportTheme(theme) {
+            currentReportTheme = theme;
+            
+            // 更新按钮状态
+            document.querySelectorAll('[data-report-theme]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-report-theme="${theme}"]`).classList.add('active');
+
+            // 重新生成报告
+            if (currentReportType === 'week') {
+                generateWeeklyReport();
+            } else {
+                updateMonthReport();
+            }
+        }
+
+        // 切换报告 Tab
+        function switchReportTab(type) {
+            currentReportType = type;
+            
+            // 更新 Tab 状态
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${type}"]`).classList.add('active');
+
+            // 显示/隐藏时间选择器
+            const timeSelector = document.getElementById('timeSelector');
+            if (type === 'month') {
+                timeSelector.style.display = 'flex';
+                initTimeSelector();
+                updateMonthReport();
+            } else {
+                timeSelector.style.display = 'none';
+                generateWeeklyReport();
+            }
+        }
+
+        // 初始化时间选择器
+        function initTimeSelector() {
+            const records = getRecords();
+            const now = new Date();
+            
+            if (records.length === 0) {
+                // 如果没有记录，使用当前年月
+                const yearSelect = document.getElementById('yearSelect');
+                const monthSelect = document.getElementById('monthSelect');
+                
+                yearSelect.innerHTML = `<option value="${now.getFullYear()}">${now.getFullYear()}年</option>`;
+                monthSelect.innerHTML = `<option value="${now.getMonth() + 1}">${now.getMonth() + 1}月</option>`;
+                return;
+            }
+
+            // 获取所有记录的日期，并解析
+            const dates = records.map(r => parseDate(r.date)).filter(d => !isNaN(d.getTime()));
+            
+            if (dates.length === 0) {
+                // 如果解析失败，使用当前日期
+                const yearSelect = document.getElementById('yearSelect');
+                const monthSelect = document.getElementById('monthSelect');
+                
+                yearSelect.innerHTML = `<option value="${now.getFullYear()}">${now.getFullYear()}年</option>`;
+                monthSelect.innerHTML = `<option value="${now.getMonth() + 1}">${now.getMonth() + 1}月</option>`;
+                return;
+            }
+            
+            const minDate = new Date(Math.min(...dates));
+            const maxDate = new Date(Math.max(...dates));
+
+            // 生成年份选项
+            const yearSelect = document.getElementById('yearSelect');
+            const years = [];
+            for (let y = minDate.getFullYear(); y <= maxDate.getFullYear(); y++) {
+                years.push(y);
+            }
+            
+            yearSelect.innerHTML = years.map(y => 
+                `<option value="${y}" ${y === maxDate.getFullYear() ? 'selected' : ''}>${y}年</option>`
+            ).join('');
+
+            // 生成月份选项
+            const monthSelect = document.getElementById('monthSelect');
+            const currentMonth = maxDate.getMonth() + 1;
+            monthSelect.innerHTML = Array.from({length: 12}, (_, i) => i + 1).map(m =>
+                `<option value="${m}" ${m === currentMonth ? 'selected' : ''}>${m}月</option>`
+            ).join('');
+        }
+
+        // 生成周报告
+        function generateWeeklyReport() {
+            const records = getRecords();
+            const container = document.getElementById('reportContent');
+
+            if (records.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <div>还没有足够的数据<br>继续记录吧</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // 计算本周的数据
+            const now = new Date();
+            const thisWeekStart = new Date(now);
+            thisWeekStart.setDate(now.getDate() - now.getDay());
+            thisWeekStart.setHours(0, 0, 0, 0);
+
+            const thisWeekEnd = new Date(thisWeekStart);
+            thisWeekEnd.setDate(thisWeekStart.getDate() + 6);
+
+            let thisWeekRecords = records.filter(r => {
+                const recordDate = parseDate(r.date);
+                return recordDate >= thisWeekStart && recordDate <= thisWeekEnd;
+            });
+
+            // 根据主题筛选
+            if (currentReportTheme !== 'all') {
+                thisWeekRecords = thisWeekRecords.filter(r => r.theme === currentReportTheme);
+            }
+
+            // 格式化日期范围
+            const weekRange = `${formatDateDisplay(formatDateString(thisWeekStart))} - ${formatDateDisplay(formatDateString(thisWeekEnd))}`;
+
+            // 统计内容
+            let contentStats = '';
+            if (currentReportTheme === 'all' || currentReportTheme === 'move') {
+                const moveRecords = thisWeekRecords.filter(r => r.theme === 'move');
+                const activities = {};
+                moveRecords.forEach(r => {
+                    if (r.activity) {
+                        activities[r.activity] = (activities[r.activity] || 0) + 1;
+                    }
+                });
+                const activityText = Object.entries(activities)
+                    .map(([activity, count]) => `${activity} ${count}次`)
+                    .join('、') || '自由活动';
+                
+                if (moveRecords.length > 0) {
+                    contentStats += `<div class="report-stat">
+                        <span class="report-label">🏃 运动</span>
+                        <span class="report-value" style="font-size: 16px;">${moveRecords.length}次 · ${activityText}</span>
+                    </div>`;
+                }
+            }
+
+            if (currentReportTheme === 'all' || currentReportTheme === 'read') {
+                const readRecords = thisWeekRecords.filter(r => r.theme === 'read');
+                const books = {};
+                readRecords.forEach(r => {
+                    if (r.bookName) {
+                        books[r.bookName] = (books[r.bookName] || 0) + 1;
+                    }
+                });
+                const bookText = Object.keys(books).length > 0 
+                    ? Object.keys(books).map(b => `《${b}》`).join('、')
+                    : '自由阅读';
+                
+                if (readRecords.length > 0) {
+                    contentStats += `<div class="report-stat">
+                        <span class="report-label">📖 阅读</span>
+                        <span class="report-value" style="font-size: 16px;">${readRecords.length}次 · ${bookText}</span>
+                    </div>`;
+                }
+            }
+
+            const themeTitle = currentReportTheme === 'all' ? '本周表现' : 
+                              currentReportTheme === 'move' ? '本周运动' : '本周阅读';
+
+            container.innerHTML = `
+                <div class="report-title">${themeTitle}</div>
+                <div style="text-align: center; color: #a0aec0; font-size: 13px; margin-bottom: 25px;">
+                    ${weekRange}
+                </div>
+                <div class="report-stat">
+                    <span class="report-label">打卡次数</span>
+                    <span class="report-value">${thisWeekRecords.length} 次</span>
+                </div>
+                ${contentStats}
+                <div style="text-align: center; margin-top: 40px; color: #a0aec0; font-size: 14px; letter-spacing: 1px;">
+                    Let it flow
+                </div>
+            `;
+        }
+
+        // 生成月报告
+        function updateMonthReport() {
+            const records = getRecords();
+            const container = document.getElementById('reportContent');
+
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            
+            if (!yearSelect.value || !monthSelect.value) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <div>还没有足够的数据<br>继续记录吧</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+
+            // 计算选中月份的数据
+            let monthRecords = records.filter(r => {
+                const recordDate = parseDate(r.date);
+                return recordDate.getFullYear() === year && (recordDate.getMonth() + 1) === month;
+            });
+
+            // 根据主题筛选
+            if (currentReportTheme !== 'all') {
+                monthRecords = monthRecords.filter(r => r.theme === currentReportTheme);
+            }
+
+            // 统计内容
+            let contentStats = '';
+            if (currentReportTheme === 'all' || currentReportTheme === 'move') {
+                const moveRecords = monthRecords.filter(r => r.theme === 'move');
+                const activities = {};
+                moveRecords.forEach(r => {
+                    if (r.activity) {
+                        activities[r.activity] = (activities[r.activity] || 0) + 1;
+                    }
+                });
+                const activityText = Object.entries(activities)
+                    .map(([activity, count]) => `${activity} ${count}次`)
+                    .join('、') || '自由活动';
+                
+                if (moveRecords.length > 0) {
+                    contentStats += `<div class="report-stat">
+                        <span class="report-label">🏃 运动</span>
+                        <span class="report-value" style="font-size: 16px;">${moveRecords.length}次 · ${activityText}</span>
+                    </div>`;
+                }
+            }
+
+            if (currentReportTheme === 'all' || currentReportTheme === 'read') {
+                const readRecords = monthRecords.filter(r => r.theme === 'read');
+                const books = {};
+                readRecords.forEach(r => {
+                    if (r.bookName) {
+                        books[r.bookName] = (books[r.bookName] || 0) + 1;
+                    }
+                });
+                const bookText = Object.keys(books).length > 0 
+                    ? Object.keys(books).map(b => `《${b}》`).join('、')
+                    : '自由阅读';
+                
+                if (readRecords.length > 0) {
+                    contentStats += `<div class="report-stat">
+                        <span class="report-label">📖 阅读</span>
+                        <span class="report-value" style="font-size: 16px;">${readRecords.length}次 · ${bookText}</span>
+                    </div>`;
+                }
+            }
+
+            // 计算该月的天数
+            const daysInMonth = new Date(year, month, 0).getDate();
+
+            const themeTitle = currentReportTheme === 'all' ? `${year}年${month}月` : 
+                              currentReportTheme === 'move' ? `${year}年${month}月运动` : `${year}年${month}月阅读`;
+
+            container.innerHTML = `
+                <div class="report-title">${themeTitle}</div>
+                <div style="text-align: center; color: #a0aec0; font-size: 13px; margin-bottom: 25px;">
+                    共 ${daysInMonth} 天
+                </div>
+                <div class="report-stat">
+                    <span class="report-label">打卡次数</span>
+                    <span class="report-value">${monthRecords.length} 次</span>
+                </div>
+                ${contentStats}
+                <div style="text-align: center; margin-top: 40px; color: #a0aec0; font-size: 14px; letter-spacing: 1px;">
+                    Let it flow
+                </div>
+            `;
+        }
+
+        // 设置相关
+        function clearAllData() {
+            if (confirm('确定要清除所有数据吗？此操作无法撤销。')) {
+                localStorage.removeItem('minimoRecords');
+                showToast('数据已清除');
+                location.reload();
+            }
+        }
+
+        // 显示提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
