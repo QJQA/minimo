@@ -42,26 +42,31 @@
             font-weight: 600;
         }
         
-        /* 筛选器 */
+        /* 筛选器容器 */
+        .filter-container {
+            margin-bottom: 20px;
+        }
+        
+        /* 筛选器行 */
         .filter-row {
             display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 12px;
             justify-content: center;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
         }
         
         .filter-btn {
             background: white;
             border: none;
-            border-radius: 25px;
-            padding: 12px 24px;
-            font-size: 16px;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            white-space: nowrap;
+            flex: 1;
+            max-width: 120px;
         }
         
         .filter-btn:hover {
@@ -544,24 +549,17 @@
             <h1>数据报告</h1>
             
             <!-- 筛选器 -->
-            <div class="filter-row">
-                <button class="filter-btn active" data-filter="all">
-                    <span>📊</span>
-                    <span>全部</span>
-                </button>
-                <button class="filter-btn" data-filter="move">
-                    <span>🏃</span>
-                    <span>运动</span>
-                </button>
-                <button class="filter-btn" data-filter="read">
-                    <span>📖</span>
-                    <span>阅读</span>
-                </button>
-            </div>
-            
-            <div class="filter-row">
-                <button class="filter-btn active" data-period="week">本周</button>
-                <button class="filter-btn" data-period="month">本月</button>
+            <div class="filter-container">
+                <div class="filter-row">
+                    <button class="filter-btn active" data-filter="all">📊 全部</button>
+                    <button class="filter-btn" data-filter="move">🏃 运动</button>
+                    <button class="filter-btn" data-filter="read">📖 阅读</button>
+                </div>
+                
+                <div class="filter-row">
+                    <button class="filter-btn active" data-period="week">本周</button>
+                    <button class="filter-btn" data-period="month">本月</button>
+                </div>
             </div>
             
             <!-- 本周报告 -->
@@ -947,11 +945,14 @@
             const dayOfWeek = today.getDay();
             const monday = new Date(today);
             monday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+            monday.setHours(0, 0, 0, 0);
+            
             const sunday = new Date(monday);
             sunday.setDate(monday.getDate() + 6);
+            sunday.setHours(23, 59, 59, 999);
             
             const weekRecords = records.filter(r => {
-                const recordDate = new Date(r.date);
+                const recordDate = new Date(r.date + 'T00:00:00');
                 return recordDate >= monday && recordDate <= sunday && 
                        (filter === 'all' || r.theme === filter);
             });
@@ -1044,10 +1045,13 @@
             const month = parseInt(document.getElementById('monthSelect').value);
             
             const monthStart = new Date(year, month - 1, 1);
+            monthStart.setHours(0, 0, 0, 0);
+            
             const monthEnd = new Date(year, month, 0);
+            monthEnd.setHours(23, 59, 59, 999);
             
             const monthRecords = records.filter(r => {
-                const recordDate = new Date(r.date);
+                const recordDate = new Date(r.date + 'T00:00:00');
                 return recordDate >= monthStart && recordDate <= monthEnd &&
                        (filter === 'all' || r.theme === filter);
             });
