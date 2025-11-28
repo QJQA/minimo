@@ -612,6 +612,74 @@
         let records = JSON.parse(localStorage.getItem('minimoRecords') || '[]');
         let currentTheme = localStorage.getItem('minimoTheme') || 'move';
         
+        // 运动图标映射表
+        const sportIcons = {
+            '跑步': '🏃',
+            '快走': '🚶',
+            '肌肉训练': '💪',
+            '游泳': '🏊',
+            '足球': '⚽',
+            '篮球': '🏀',
+            '排球': '🏐',
+            '网球': '🎾',
+            '羽毛球': '🏸',
+            '攀岩': '🧗',
+            '爬山': '⛰️',
+            '射箭': '🏹',
+            '高尔夫球': '⛳',
+            '腰旗橄榄球': '🏈',
+            '越野跑': '🏃‍♂️',
+            '卡丁车': '🏎️',
+            '划船': '🚣',
+            '瑜伽': '🧘',
+            '骑行': '🚴'
+        };
+        
+        // 运动关键词匹配表（用于自动识别新运动）
+        const sportKeywords = [
+            { keywords: ['跑步', '长跑', '短跑'], icon: '🏃' },
+            { keywords: ['快走', '散步', '走路'], icon: '🚶' },
+            { keywords: ['肌肉', '训练', '健身', '举重', '健身房'], icon: '💪' },
+            { keywords: ['游泳', '游', '泳'], icon: '🏊' },
+            { keywords: ['足球', '踢球', '足'], icon: '⚽' },
+            { keywords: ['篮球', '篮'], icon: '🏀' },
+            { keywords: ['排球', '排'], icon: '🏐' },
+            { keywords: ['网球', '网'], icon: '🎾' },
+            { keywords: ['羽毛球', '羽毛', '羽'], icon: '🏸' },
+            { keywords: ['攀岩', '攀'], icon: '🧗' },
+            { keywords: ['爬山', '爬', '登山'], icon: '⛰️' },
+            { keywords: ['射箭', '箭'], icon: '🏹' },
+            { keywords: ['高尔夫', '高球', 'golf'], icon: '⛳' },
+            { keywords: ['橄榄球', '腰旗', '橄'], icon: '🏈' },
+            { keywords: ['越野', '越野跑'], icon: '🏃‍♂️' },
+            { keywords: ['卡丁', '赛车', '卡车'], icon: '🏎️' },
+            { keywords: ['划船', '划', '赛艇', '皮划艇'], icon: '🚣' },
+            { keywords: ['瑜伽', '瑜', '冥想'], icon: '🧘' },
+            { keywords: ['骑行', '骑', '自行车', '单车', '骑车'], icon: '🚴' }
+        ];
+        
+        // 获取运动图标
+        function getSportIcon(sportName) {
+            if (!sportName) return '🏋️';
+            
+            // 先查精确匹配
+            if (sportIcons[sportName]) {
+                return sportIcons[sportName];
+            }
+            
+            // 再用关键词模糊匹配
+            for (let item of sportKeywords) {
+                for (let keyword of item.keywords) {
+                    if (sportName.includes(keyword)) {
+                        return item.icon;
+                    }
+                }
+            }
+            
+            // 默认图标
+            return '🏋️';
+        }
+        
         // 主题配置
         const themeConfig = {
             move: {
@@ -783,7 +851,14 @@
             sortedRecords.forEach(record => {
                 const date = new Date(record.date);
                 const dateStr = `${date.getMonth() + 1}月${date.getDate()}日`;
-                const emoji = record.theme === 'move' ? '🏃' : '📖';
+                
+                // ✨ 新增：根据运动名称获取对应的图标
+                let emoji = '';
+                if (record.theme === 'move') {
+                    emoji = getSportIcon(record.activity);
+                } else {
+                    emoji = '📖';
+                }
                 
                 let content = '';
                 let meta = '';
