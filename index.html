@@ -79,107 +79,92 @@
             color: white;
         }
         
-        /* 报告容器 */
+        /* 报告卡片 */
+        .report-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .report-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+        
+        .report-card-date {
+            font-size: 13px;
+            color: #a0aec0;
+            margin-bottom: 16px;
+        }
+        
+        .report-card-stats {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+        
+        .report-card-count {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+            line-height: 1;
+        }
+        
+        .report-card-label {
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .report-card-breakdown {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+        
+        .report-card-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .report-card-item .emoji {
+            font-size: 16px;
+        }
+        
+        .report-card-item-text {
+            color: #4a5568;
+        }
+        
+        .report-card-item-count {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        /* 报告页面特殊样式 */
+        .report-page .card {
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+        }
+        
+        .report-page h1 {
+            margin-bottom: 24px;
+        }
+        
         .report-container {
             display: none;
         }
         
         .report-container.active {
             display: block;
-        }
-        
-        /* 报告标题 */
-        .report-title {
-            text-align: center;
-            margin-bottom: 8px;
-        }
-        
-        .report-title h2 {
-            font-size: 24px;
-            color: #2d3748;
-            margin-bottom: 8px;
-        }
-        
-        .date-range {
-            color: #718096;
-            font-size: 14px;
-        }
-        
-        /* 打卡次数卡片 - 突出显示 */
-        .checkin-summary {
-            text-align: center;
-            padding: 32px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            margin-bottom: 20px;
-        }
-        
-        .checkin-label {
-            font-size: 16px;
-            opacity: 0.9;
-            margin-bottom: 12px;
-        }
-        
-        .checkin-count {
-            font-size: 56px;
-            font-weight: 700;
-            line-height: 1;
-        }
-        
-        /* 活动详情 */
-        .activity-section {
-            margin-top: 24px;
-        }
-        
-        .activity-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
-        .activity-header .emoji {
-            font-size: 24px;
-        }
-        
-        .activity-header .title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #2d3748;
-        }
-        
-        .activity-list {
-            padding-left: 0;
-            list-style: none;
-        }
-        
-        .activity-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            background: #f7fafc;
-            border-radius: 12px;
-            transition: all 0.2s;
-        }
-        
-        .activity-item:hover {
-            background: #edf2f7;
-            transform: translateX(4px);
-        }
-        
-        .activity-name {
-            color: #4a5568;
-            font-size: 16px;
-        }
-        
-        .activity-count {
-            color: #667eea;
-            font-weight: 600;
-            font-size: 18px;
         }
         
         /* 空状态 */
@@ -546,64 +531,8 @@
         
         <!-- 报告页面 -->
         <div class="report-page">
-            <h1>数据报告</h1>
-            
-            <!-- 筛选器 -->
-            <div class="filter-container">
-                <div class="filter-row">
-                    <button class="filter-btn active" data-filter="all">📊 全部</button>
-                    <button class="filter-btn" data-filter="move">🏃 运动</button>
-                    <button class="filter-btn" data-filter="read">📖 阅读</button>
-                </div>
-                
-                <div class="filter-row">
-                    <button class="filter-btn active" data-period="week">本周</button>
-                    <button class="filter-btn" data-period="month">本月</button>
-                </div>
-            </div>
-            
-            <!-- 本周报告 -->
-            <div class="report-container active" id="weekReport">
-                <div class="card">
-                    <div class="report-title">
-                        <h2>本周表现</h2>
-                        <div class="date-range" id="weekRange"></div>
-                    </div>
-                    
-                    <div class="checkin-summary card">
-                        <div class="checkin-label">打卡次数</div>
-                        <div class="checkin-count" id="weekCount">0 次</div>
-                    </div>
-                    
-                    <div id="weekActivities"></div>
-                    
-                    <div class="motto">Let it flow</div>
-                </div>
-            </div>
-            
-            <!-- 本月报告 -->
-            <div class="report-container" id="monthReport">
-                <div class="month-selector">
-                    <select id="yearSelect"></select>
-                    <select id="monthSelect"></select>
-                </div>
-                
-                <div class="card">
-                    <div class="report-title">
-                        <h2>本月表现</h2>
-                        <div class="date-range" id="monthRange"></div>
-                    </div>
-                    
-                    <div class="checkin-summary card">
-                        <div class="checkin-label">打卡次数</div>
-                        <div class="checkin-count" id="monthCount">0 次</div>
-                    </div>
-                    
-                    <div id="monthActivities"></div>
-                    
-                    <div class="motto">Let it flow</div>
-                </div>
-            </div>
+            <h1>📊 我的数据</h1>
+            <div class="card" id="reportContainer"></div>
         </div>
         
         <!-- 设置页面 -->
@@ -885,67 +814,83 @@
         
         // 报告功能
         function initReports() {
-            // 筛选器
-            document.querySelectorAll('[data-filter]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    updateReports();
-                });
-            });
-            
-            document.querySelectorAll('[data-period]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('[data-period]').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    const period = this.dataset.period;
-                    document.querySelectorAll('.report-container').forEach(c => c.classList.remove('active'));
-                    
-                    if (period === 'week') {
-                        document.getElementById('weekReport').classList.add('active');
-                    } else {
-                        document.getElementById('monthReport').classList.add('active');
-                    }
-                    
-                    updateReports();
-                });
-            });
-            
-            // 月份选择器
-            const yearSelect = document.getElementById('yearSelect');
-            const monthSelect = document.getElementById('monthSelect');
-            
-            const currentYear = new Date().getFullYear();
-            for (let y = currentYear; y >= currentYear - 5; y--) {
-                yearSelect.innerHTML += `<option value="${y}">${y}年</option>`;
-            }
-            
-            for (let m = 1; m <= 12; m++) {
-                monthSelect.innerHTML += `<option value="${m}">${m}月</option>`;
-            }
-            
-            yearSelect.value = currentYear;
-            monthSelect.value = new Date().getMonth() + 1;
-            
-            yearSelect.addEventListener('change', updateReports);
-            monthSelect.addEventListener('change', updateReports);
-            
             updateReports();
         }
         
         function updateReports() {
-            const activeFilter = document.querySelector('[data-filter].active')?.dataset.filter || 'all';
-            const activePeriod = document.querySelector('[data-period].active')?.dataset.period || 'week';
+            const container = document.getElementById('reportContainer');
             
-            if (activePeriod === 'week') {
-                updateWeekReport(activeFilter);
-            } else {
-                updateMonthReport(activeFilter);
+            if (records.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="emoji">📊</div>
+                        <p>还没有数据，开始打卡吧！</p>
+                    </div>
+                `;
+                return;
             }
+            
+            // 计算三个时间段的数据
+            const weekData = calculateWeekData();
+            const monthData = calculateMonthData();
+            const allData = calculateAllData();
+            
+            // 生成 HTML
+            let html = '';
+            
+            // 这一周
+            html += generateReportCard('这一周', weekData.dateRange, weekData.count, weekData.breakdown);
+            
+            // 这个月
+            html += generateReportCard('这个月', monthData.dateRange, monthData.count, monthData.breakdown);
+            
+            // 全部时间
+            html += generateReportCard('全部时间', allData.dateRange, allData.count, allData.breakdown);
+            
+            // 添加底部 motto
+            html += '<div class="motto" style="margin-top: 24px; margin-bottom: 0;">Let it flow</div>';
+            
+            container.innerHTML = html;
         }
         
-        function updateWeekReport(filter) {
+        // 生成报告卡片 HTML
+        function generateReportCard(title, dateRange, count, breakdown) {
+            let breakdownHtml = '';
+            
+            if (breakdown.move > 0 || breakdown.read > 0) {
+                breakdownHtml = `
+                    <div class="report-card-breakdown">
+                        ${breakdown.move > 0 ? `
+                            <div class="report-card-item">
+                                <span class="emoji">🏃</span>
+                                <span class="report-card-item-text">运动 <span class="report-card-item-count">${breakdown.move}</span></span>
+                            </div>
+                        ` : ''}
+                        ${breakdown.read > 0 ? `
+                            <div class="report-card-item">
+                                <span class="emoji">📖</span>
+                                <span class="report-card-item-text">阅读 <span class="report-card-item-count">${breakdown.read}</span></span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="report-card">
+                    <div class="report-card-title">${title}</div>
+                    <div class="report-card-date">${dateRange}</div>
+                    <div class="report-card-stats">
+                        <div class="report-card-count">${count}</div>
+                        <div class="report-card-label">次</div>
+                    </div>
+                    ${breakdownHtml}
+                </div>
+            `;
+        }
+        
+        // 计算本周数据
+        function calculateWeekData() {
             const today = new Date();
             const dayOfWeek = today.getDay();
             const monday = new Date(today);
@@ -958,96 +903,24 @@
             
             const weekRecords = records.filter(r => {
                 const recordDate = new Date(r.date + 'T00:00:00');
-                return recordDate >= monday && recordDate <= sunday && 
-                       (filter === 'all' || r.theme === filter);
+                return recordDate >= monday && recordDate <= sunday;
             });
             
-            // 日期范围
-            document.getElementById('weekRange').textContent = 
-                `${monday.getMonth() + 1}月${monday.getDate()}日 - ${sunday.getMonth() + 1}月${sunday.getDate()}日`;
+            const moveCount = weekRecords.filter(r => r.theme === 'move').length;
+            const readCount = weekRecords.filter(r => r.theme === 'read').length;
             
-            // 打卡次数
-            document.getElementById('weekCount').textContent = `${weekRecords.length} 次`;
-            
-            // 活动详情
-            const container = document.getElementById('weekActivities');
-            
-            if (weekRecords.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="emoji">😊</div>
-                        <p>本周还没有记录</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // 统计活动
-            const moveActivities = {};
-            const readBooks = {};
-            
-            weekRecords.forEach(r => {
-                if (r.theme === 'move' && r.activity) {
-                    moveActivities[r.activity] = (moveActivities[r.activity] || 0) + 1;
-                } else if (r.theme === 'read' && r.bookName) {
-                    readBooks[r.bookName] = (readBooks[r.bookName] || 0) + 1;
-                }
-            });
-            
-            let html = '';
-            
-            // 运动部分
-            if (filter !== 'read' && Object.keys(moveActivities).length > 0) {
-                html += `
-                    <div class="activity-section">
-                        <div class="activity-header">
-                            <span class="emoji">🏃</span>
-                            <span class="title">运动</span>
-                        </div>
-                        <ul class="activity-list">
-                `;
-                
-                for (const [activity, count] of Object.entries(moveActivities)) {
-                    html += `
-                        <li class="activity-item">
-                            <span class="activity-name">${activity}</span>
-                            <span class="activity-count">${count}次</span>
-                        </li>
-                    `;
-                }
-                
-                html += `</ul></div>`;
-            }
-            
-            // 阅读部分
-            if (filter !== 'move' && Object.keys(readBooks).length > 0) {
-                html += `
-                    <div class="activity-section">
-                        <div class="activity-header">
-                            <span class="emoji">📖</span>
-                            <span class="title">阅读</span>
-                        </div>
-                        <ul class="activity-list">
-                `;
-                
-                for (const [book, count] of Object.entries(readBooks)) {
-                    html += `
-                        <li class="activity-item">
-                            <span class="activity-name">${book}</span>
-                            <span class="activity-count">${count}次</span>
-                        </li>
-                    `;
-                }
-                
-                html += `</ul></div>`;
-            }
-            
-            container.innerHTML = html;
+            return {
+                dateRange: `${monday.getMonth() + 1}.${monday.getDate()} - ${sunday.getMonth() + 1}.${sunday.getDate()}`,
+                count: weekRecords.length,
+                breakdown: { move: moveCount, read: readCount }
+            };
         }
         
-        function updateMonthReport(filter) {
-            const year = parseInt(document.getElementById('yearSelect').value);
-            const month = parseInt(document.getElementById('monthSelect').value);
+        // 计算本月数据
+        function calculateMonthData() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
             
             const monthStart = new Date(year, month - 1, 1);
             monthStart.setHours(0, 0, 0, 0);
@@ -1057,91 +930,39 @@
             
             const monthRecords = records.filter(r => {
                 const recordDate = new Date(r.date + 'T00:00:00');
-                return recordDate >= monthStart && recordDate <= monthEnd &&
-                       (filter === 'all' || r.theme === filter);
+                return recordDate >= monthStart && recordDate <= monthEnd;
             });
             
-            // 日期范围
-            document.getElementById('monthRange').textContent = 
-                `${year}年${month}月 · 共${monthEnd.getDate()}天`;
+            const moveCount = monthRecords.filter(r => r.theme === 'move').length;
+            const readCount = monthRecords.filter(r => r.theme === 'read').length;
             
-            // 打卡次数
-            document.getElementById('monthCount').textContent = `${monthRecords.length} 次`;
+            return {
+                dateRange: `${year}年${month}月`,
+                count: monthRecords.length,
+                breakdown: { move: moveCount, read: readCount }
+            };
+        }
+        
+        // 计算全部时间数据
+        function calculateAllData() {
+            const moveCount = records.filter(r => r.theme === 'move').length;
+            const readCount = records.filter(r => r.theme === 'read').length;
             
-            // 活动详情
-            const container = document.getElementById('monthActivities');
+            const firstDate = records.length > 0 ? records[records.length - 1].date : null;
+            const lastDate = records.length > 0 ? records[0].date : null;
             
-            if (monthRecords.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="emoji">😊</div>
-                        <p>本月还没有记录</p>
-                    </div>
-                `;
-                return;
+            let dateRange = '全部记录';
+            if (firstDate && lastDate) {
+                const first = new Date(firstDate);
+                const last = new Date(lastDate);
+                dateRange = `${first.getFullYear()}.${first.getMonth() + 1}.${first.getDate()} - ${last.getFullYear()}.${last.getMonth() + 1}.${last.getDate()}`;
             }
             
-            // 统计活动
-            const moveActivities = {};
-            const readBooks = {};
-            
-            monthRecords.forEach(r => {
-                if (r.theme === 'move' && r.activity) {
-                    moveActivities[r.activity] = (moveActivities[r.activity] || 0) + 1;
-                } else if (r.theme === 'read' && r.bookName) {
-                    readBooks[r.bookName] = (readBooks[r.bookName] || 0) + 1;
-                }
-            });
-            
-            let html = '';
-            
-            // 运动部分
-            if (filter !== 'read' && Object.keys(moveActivities).length > 0) {
-                html += `
-                    <div class="activity-section">
-                        <div class="activity-header">
-                            <span class="emoji">🏃</span>
-                            <span class="title">运动</span>
-                        </div>
-                        <ul class="activity-list">
-                `;
-                
-                for (const [activity, count] of Object.entries(moveActivities)) {
-                    html += `
-                        <li class="activity-item">
-                            <span class="activity-name">${activity}</span>
-                            <span class="activity-count">${count}次</span>
-                        </li>
-                    `;
-                }
-                
-                html += `</ul></div>`;
-            }
-            
-            // 阅读部分
-            if (filter !== 'move' && Object.keys(readBooks).length > 0) {
-                html += `
-                    <div class="activity-section">
-                        <div class="activity-header">
-                            <span class="emoji">📖</span>
-                            <span class="title">阅读</span>
-                        </div>
-                        <ul class="activity-list">
-                `;
-                
-                for (const [book, count] of Object.entries(readBooks)) {
-                    html += `
-                        <li class="activity-item">
-                            <span class="activity-name">${book}</span>
-                            <span class="activity-count">${count}次</span>
-                        </li>
-                    `;
-                }
-                
-                html += `</ul></div>`;
-            }
-            
-            container.innerHTML = html;
+            return {
+                dateRange: dateRange,
+                count: records.length,
+                breakdown: { move: moveCount, read: readCount }
+            };
         }
         
         // 设置
