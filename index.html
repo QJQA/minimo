@@ -335,6 +335,36 @@
             box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
         }
         
+        .checkin-button.hidden {
+            display: none;
+        }
+        
+        /* 表单默认隐藏 */
+        #checkinForm {
+            display: none;
+        }
+        
+        #checkinForm.show {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 提示语隐藏 */
+        .task-prompt.hidden {
+            display: none;
+        }
+        
         /* 表单 */
         .form-group {
             margin-bottom: 20px;
@@ -378,6 +408,43 @@
         .optional {
             color: #a0aec0;
             font-size: 12px;
+        }
+        
+        /* 表单按钮 */
+        .form-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .form-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .form-btn-cancel {
+            background: #f0f4f8;
+            color: #4a5568;
+        }
+        
+        .form-btn-cancel:hover {
+            background: #e2e8f0;
+        }
+        
+        .form-btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .form-btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
         
         /* 记录列表 */
@@ -518,6 +585,12 @@
                             <textarea id="readNotes" maxlength="500" placeholder="如果你愿意，可以记录一下今天的感受..."></textarea>
                             <div class="char-count"><span id="readCharCount">0</span>/500</div>
                         </div>
+                    </div>
+                    
+                    <!-- 表单按钮 -->
+                    <div class="form-buttons">
+                        <button type="button" class="form-btn form-btn-cancel" id="formCancelBtn">返回</button>
+                        <button type="button" class="form-btn form-btn-submit" id="formSubmitBtn">完成</button>
                     </div>
                 </form>
             </div>
@@ -771,6 +844,9 @@
         function initCheckin() {
             const form = document.getElementById('checkinForm');
             const checkinBtn = document.getElementById('checkinBtn');
+            const taskPrompt = document.querySelector('.task-prompt');
+            const formCancelBtn = document.getElementById('formCancelBtn');
+            const formSubmitBtn = document.getElementById('formSubmitBtn');
             
             // 字符计数
             document.getElementById('notes').addEventListener('input', function() {
@@ -781,7 +857,7 @@
                 document.getElementById('readCharCount').textContent = this.value.length;
             });
             
-            // 打卡按钮
+            // 打卡按钮 - 点击后展开表单
             checkinBtn.addEventListener('click', function() {
                 const today = new Date().toISOString().split('T')[0];
                 const existingRecord = records.find(r => r.date === today && r.theme === currentTheme);
@@ -790,6 +866,31 @@
                     alert('今天已经打过卡啦！');
                     return;
                 }
+                
+                // 隐藏按钮和提示语，显示表单
+                checkinBtn.classList.add('hidden');
+                taskPrompt.classList.add('hidden');
+                form.classList.add('show');
+                
+                // 清空之前的数据
+                form.reset();
+                document.getElementById('charCount').textContent = '0';
+                document.getElementById('readCharCount').textContent = '0';
+            });
+            
+            // 返回按钮 - 隐藏表单，显示按钮
+            formCancelBtn.addEventListener('click', function() {
+                checkinBtn.classList.remove('hidden');
+                taskPrompt.classList.remove('hidden');
+                form.classList.remove('show');
+                form.reset();
+                document.getElementById('charCount').textContent = '0';
+                document.getElementById('readCharCount').textContent = '0';
+            });
+            
+            // 提交按钮
+            formSubmitBtn.addEventListener('click', function() {
+                const today = new Date().toISOString().split('T')[0];
                 
                 let record = {
                     date: today,
@@ -819,12 +920,19 @@
                 records.unshift(record);
                 localStorage.setItem('minimoRecords', JSON.stringify(records));
                 
+                // 显示反馈并返回
                 alert(themeConfig[currentTheme].feedback);
                 
-                // 清空表单
+                // 隐藏表单，显示按钮
+                checkinBtn.classList.remove('hidden');
+                taskPrompt.classList.remove('hidden');
+                form.classList.remove('show');
                 form.reset();
                 document.getElementById('charCount').textContent = '0';
                 document.getElementById('readCharCount').textContent = '0';
+                
+                // 更新记录列表
+                updateRecordsList();
             });
         }
         
