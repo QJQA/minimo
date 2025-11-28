@@ -845,8 +845,13 @@
                 return;
             }
             
+            // ✅ 修复：按日期降序排序（最新的在前）
+            const sortedRecords = [...records].sort((a, b) => {
+                return b.date.localeCompare(a.date);
+            });
+            
             let html = '';
-            records.forEach(record => {
+            sortedRecords.forEach(record => {
                 const date = new Date(record.date);
                 const dateStr = `${date.getMonth() + 1}月${date.getDate()}日`;
                 const emoji = record.theme === 'move' ? '🏃' : '📖';
