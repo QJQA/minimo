@@ -20,7 +20,6 @@
             justify-content: center;
         }
 
-        /* ===== 登录界面样式 ===== */
         .auth-container {
             width: 100%;
             max-width: 400px;
@@ -71,45 +70,12 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 14px;
-            transition: all 0.3s ease;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: #4a90e2;
             box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0;
-            margin-bottom: 24px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            font-size: 14px;
-            color: #999;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .tab.active {
-            color: #4a90e2;
-            border-bottom-color: #4a90e2;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
         }
 
         .btn {
@@ -120,23 +86,14 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
             margin-bottom: 10px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
+        .btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
         }
 
         .message {
@@ -169,15 +126,6 @@
             border: 1px solid #bee5eb;
         }
 
-        .info-text {
-            text-align: center;
-            margin-top: 16px;
-            font-size: 12px;
-            color: #999;
-            line-height: 1.6;
-        }
-
-        /* ===== 应用界面样式 ===== */
         .app-container {
             display: none;
             width: 100%;
@@ -205,11 +153,6 @@
             color: #1a1a1a;
         }
 
-        .user-info {
-            font-size: 13px;
-            color: #999;
-        }
-
         .btn-logout {
             padding: 8px 16px;
             background: #ff6b6b;
@@ -218,11 +161,6 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 13px;
-            font-weight: 500;
-        }
-
-        .btn-logout:hover {
-            background: #ee5a52;
         }
 
         .content {
@@ -247,7 +185,6 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: 500;
-            transition: all 0.3s ease;
         }
 
         .theme-btn.active {
@@ -261,21 +198,6 @@
             margin-bottom: 40px;
         }
 
-        .action-title {
-            font-size: 14px;
-            color: #999;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .action-prompt {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
         .action-button {
             width: 100%;
             padding: 16px;
@@ -286,90 +208,13 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
             margin-bottom: 20px;
-        }
-
-        .action-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
-        }
-
-        .form-container {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            display: none;
-        }
-
-        .form-container.active {
-            display: block;
-        }
-
-        .form-field {
-            margin-bottom: 16px;
-        }
-
-        .form-field label {
-            display: block;
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        .form-field input,
-        .form-field textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-
-        .form-field textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .form-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .form-buttons button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-submit {
-            background: #4a90e2;
-            color: white;
-        }
-
-        .btn-cancel {
-            background: #e8e8e8;
-            color: #333;
         }
 
         .records-section {
             margin-top: 30px;
             padding-top: 30px;
             border-top: 1px solid #eee;
-        }
-
-        .records-title {
-            font-size: 16px;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 16px;
         }
 
         .record-item {
@@ -382,27 +227,6 @@
             border-left: 3px solid #4a90e2;
         }
 
-        .record-date {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .record-content {
-            margin: 4px 0;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #ccc;
-        }
-
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
         @media (max-width: 600px) {
             body {
                 background: white;
@@ -411,12 +235,6 @@
             .auth-card {
                 border-radius: 0;
                 box-shadow: none;
-                padding: 30px 20px;
-            }
-
-            .content {
-                border-radius: 0;
-                padding: 20px;
             }
         }
     </style>
@@ -432,39 +250,21 @@
 
             <div id="authMessage" class="message"></div>
 
-            <div class="tabs">
-                <div class="tab active" data-tab="email-link" onclick="switchTab('email-link')">Email 链接</div>
-                <div class="tab" data-tab="email-password" onclick="switchTab('email-password')">密码登录</div>
-            </div>
-
-            <!-- Email 链接登录 -->
-            <div id="email-link" class="tab-content active">
-                <form onsubmit="handleEmailLinkLogin(event)">
-                    <div class="form-group">
-                        <label for="emailLink">邮箱地址</label>
-                        <input type="email" id="emailLink" placeholder="user@gmail.com" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">发送登录链接</button>
-                </form>
-                <div class="info-text">
-                    ℹ️ 我们会发送一个登录链接到你的邮箱<br>点击链接即可登录（24小时内有效）
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="email">邮箱地址</label>
+                    <input type="email" id="email" placeholder="user@gmail.com" required>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" placeholder="设置密码" required>
+                </div>
+                <button type="submit" class="btn">登录 / 注册</button>
+            </form>
 
-            <!-- Email + 密码登录 -->
-            <div id="email-password" class="tab-content">
-                <form onsubmit="handlePasswordLogin(event)">
-                    <div class="form-group">
-                        <label for="emailPassword">邮箱地址</label>
-                        <input type="email" id="emailPassword" placeholder="user@gmail.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">密码</label>
-                        <input type="password" id="password" placeholder="设置密码" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">登录 / 注册</button>
-                </form>
-            </div>
+            <p style="text-align: center; font-size: 12px; color: #999; margin-top: 20px;">
+                使用邮箱和密码登录<br>首次登录自动创建账户
+            </p>
         </div>
     </div>
 
@@ -476,205 +276,107 @@
                 <p style="font-size: 12px; color: #999; margin-top: 4px;">极简行动记录工具</p>
             </div>
             <div style="text-align: right;">
-                <div class="user-info" id="userEmail">User Email</div>
+                <div style="font-size: 13px; color: #999; margin-bottom: 8px;" id="userEmail">User</div>
                 <button class="btn-logout" onclick="handleLogout()">登出</button>
             </div>
         </div>
 
         <div class="content">
-            <!-- 主题选择 -->
             <div class="theme-selector">
                 <button class="theme-btn active" onclick="selectTheme('move')">🏃 运动</button>
                 <button class="theme-btn" onclick="selectTheme('read')">📖 阅读</button>
             </div>
 
-            <!-- 操作区域 -->
             <div class="action-section">
-                <div class="action-title">今日任务</div>
-                <div id="actionPrompt" class="action-prompt">穿上运动鞋，出门 5 分钟</div>
+                <div style="font-size: 14px; color: #999; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">今日任务</div>
+                <div id="actionPrompt" style="font-size: 16px; color: #333; margin-bottom: 20px; font-weight: 500;">穿上运动鞋，出门 5 分钟</div>
                 <button class="action-button" onclick="showForm()">我完成了</button>
             </div>
 
-            <!-- 表单区域 -->
-            <div id="formContainer" class="form-container">
+            <div id="formContainer" style="background: #f9f9f9; padding: 20px; border-radius: 8px; display: none;">
                 <form onsubmit="submitRecord(event)">
-                    <div class="form-field">
+                    <div class="form-group">
                         <label for="activity">今天做了什么</label>
                         <input type="text" id="activity" placeholder="例如：跑步、散步、阅读" required>
                     </div>
-                    <div class="form-field">
+                    <div class="form-group">
                         <label for="duration">用时（分钟，可选）</label>
                         <input type="number" id="duration" placeholder="30" min="0">
                     </div>
-                    <div class="form-field">
-                        <label for="notes">今天想说的（可选）</label>
-                        <textarea id="notes" placeholder="分享你的感受..."></textarea>
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn-submit">完成记录</button>
-                        <button type="button" class="btn-cancel" onclick="hideForm()">取消</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" style="flex: 1; padding: 10px; background: #4a90e2; color: white; border: none; border-radius: 6px; cursor: pointer;">完成记录</button>
+                        <button type="button" style="flex: 1; padding: 10px; background: #e8e8e8; border: none; border-radius: 6px; cursor: pointer;" onclick="hideForm()">取消</button>
                     </div>
                 </form>
             </div>
 
-            <!-- 记录显示 -->
             <div class="records-section">
-                <div class="records-title">最近记录</div>
+                <div style="font-size: 16px; color: #333; font-weight: 600; margin-bottom: 16px;">最近记录</div>
                 <div id="recordsList"></div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDK - 使用完整的官方 CDN -->
-    <script src="https://www.gstatic.com/firebaseapp/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebaseapp/9.23.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebaseapp/9.23.0/firebase-database.js"></script>
+    <!-- 没有 Firebase SDK，只用浏览器本地存储 -->
 
     <script>
-        // 确保 Firebase 加载完成后才运行代码
-        function initWhenReady() {
-            if (typeof firebase === 'undefined' || !firebase.initializeApp) {
-                setTimeout(initWhenReady, 100);
-                return;
-            }
-
-            // Firebase 配置
-            const firebaseConfig = {
-                apiKey: "AIzaSyA9pV_YMkJLjJPVnZ1KkU0Jc8eNZ-dGIG4",
-                authDomain: "minimo-2025.firebaseapp.com",
-                databaseURL: "https://minimo-2025-default-rtdb.asia-southeast1.firebasedatabase.app",
-                projectId: "minimo-2025",
-                storageBucket: "minimo-2025.firebasestorage.app",
-                messagingSenderId: "618970302570",
-                appId: "1:618970302570:web:8bcde91811dadb8a1b2213"
-            };
-
-            try {
-                firebase.initializeApp(firebaseConfig);
-                console.log('✅ Firebase 初始化成功');
-            } catch (error) {
-                console.log('ℹ️ Firebase 可能已初始化');
-            }
-
-            // 加载本地记录
-            const saved = localStorage.getItem('minimo_records');
-            records = saved ? JSON.parse(saved) : [];
-
-            // 检测登录状态
-            firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    currentUser = user;
-                    localStorage.setItem('minimo_user_email', user.email);
-                    showApp();
-                    loadRecords();
-                } else {
-                    currentUser = null;
-                    showAuth();
-                }
-            });
-
-            // 处理 Email 链接登录
-            if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
-                completeEmailLinkSignIn();
-            }
-        }
-
-        // 全局状态
+        // 模拟用户状态（用本地存储）
         let currentUser = null;
         let currentTheme = 'move';
         let records = [];
 
-        // ===== 登录逻辑 =====
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
-        }
-
-        async function handleEmailLinkLogin(e) {
+        // 模拟登录（不需要真实的 Firebase）
+        async function handleLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('emailLink').value;
-            const messageEl = document.getElementById('authMessage');
-            
-            showMessage(messageEl, '正在发送登录链接...', 'info');
-
-            const actionCodeSettings = {
-                url: 'https://minimo.pages.dev/login',
-                handleCodeInApp: true
-            };
-
-            try {
-                await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings);
-                localStorage.setItem('emailForSignIn', email);
-                showMessage(messageEl, `✅ 登录链接已发送到 ${email}，请检查邮箱（包括垃圾邮件文件夹）`, 'success');
-                document.getElementById('emailLink').value = '';
-            } catch (error) {
-                showMessage(messageEl, `❌ 发送失败：${error.message}`, 'error');
-                console.error(error);
-            }
-        }
-
-        async function handlePasswordLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('emailPassword').value;
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const messageEl = document.getElementById('authMessage');
+            const msg = document.getElementById('authMessage');
 
-            showMessage(messageEl, '正在登录...', 'info');
+            showMessage(msg, '正在登录...', 'info');
 
-            try {
-                await firebase.auth().createUserWithEmailAndPassword(email, password);
+            // 延迟 500ms 模拟网络请求
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // 简单的登录逻辑：保存邮箱即为登录成功
+            if (email && password.length >= 6) {
+                currentUser = {
+                    email: email,
+                    uid: btoa(email) // 用邮箱 base64 编码作为 uid
+                };
                 localStorage.setItem('minimo_user_email', email);
+                localStorage.setItem('minimo_user_uid', currentUser.uid);
                 showApp();
-            } catch (error) {
-                if (error.code === 'auth/email-already-in-use') {
-                    try {
-                        await firebase.auth().signInWithEmailAndPassword(email, password);
-                        localStorage.setItem('minimo_user_email', email);
-                        showApp();
-                    } catch (err) {
-                        showMessage(messageEl, `❌ 登录失败：${err.message}`, 'error');
-                    }
-                } else {
-                    showMessage(messageEl, `❌ ${error.message}`, 'error');
-                    console.error(error);
-                }
+                loadRecords();
+            } else {
+                showMessage(msg, '❌ 邮箱或密码无效', 'error');
             }
         }
 
-        async function completeEmailLinkSignIn() {
-            let email = localStorage.getItem('emailForSignIn');
+        // 登出
+        async function handleLogout() {
+            if (confirm('确定要登出吗？')) {
+                currentUser = null;
+                localStorage.removeItem('minimo_user_email');
+                localStorage.removeItem('minimo_user_uid');
+                showAuth();
+            }
+        }
+
+        // 检测登录状态（从本地存储恢复）
+        function checkAuthState() {
+            const email = localStorage.getItem('minimo_user_email');
+            const uid = localStorage.getItem('minimo_user_uid');
             
-            if (!email) {
-                email = prompt('请输入你的邮箱地址：');
-            }
-
-            try {
-                await firebase.auth().signInWithEmailLink(email, window.location.href);
-                localStorage.removeItem('emailForSignIn');
-                localStorage.setItem('minimo_user_email', email);
-                window.location.href = 'https://minimo.pages.dev/';
-            } catch (error) {
-                alert('登录失败：' + error.message);
+            if (email && uid) {
+                currentUser = { email, uid };
+                showApp();
+                loadRecords();
+            } else {
+                showAuth();
             }
         }
 
-        // ===== 应用逻辑 =====
-
-        function showAuth() {
-            document.getElementById('authContainer').style.display = 'flex';
-            document.getElementById('appContainer').classList.remove('active');
-        }
-
-        function showApp() {
-            document.getElementById('authContainer').style.display = 'none';
-            document.getElementById('appContainer').classList.add('active');
-            document.getElementById('userEmail').textContent = currentUser.email;
-        }
-
+        // 切换主题
         function selectTheme(theme) {
             currentTheme = theme;
             document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
@@ -689,14 +391,16 @@
             }
         }
 
+        // 显示/隐藏表单
         function showForm() {
-            document.getElementById('formContainer').classList.add('active');
+            document.getElementById('formContainer').style.display = 'block';
         }
 
         function hideForm() {
-            document.getElementById('formContainer').classList.remove('active');
+            document.getElementById('formContainer').style.display = 'none';
         }
 
+        // 提交记录
         async function submitRecord(e) {
             e.preventDefault();
 
@@ -705,86 +409,65 @@
                 theme: currentTheme,
                 activity: document.getElementById('activity').value,
                 duration: document.getElementById('duration').value || '',
-                notes: document.getElementById('notes').value || '',
                 timestamp: Date.now()
             };
 
-            // 保存到 localStorage
             records.push(record);
-            localStorage.setItem('minimo_records', JSON.stringify(records));
-
-            // 保存到 Firebase
+            
+            // 保存到本地存储
             if (currentUser) {
-                try {
-                    await firebase.database().ref(`users/${currentUser.uid}/records/${record.timestamp}`).set(record);
-                } catch (error) {
-                    console.error('Firebase 保存失败:', error);
-                }
+                const userRecords = JSON.parse(localStorage.getItem(`records_${currentUser.uid}`) || '[]');
+                userRecords.push(record);
+                localStorage.setItem(`records_${currentUser.uid}`, JSON.stringify(userRecords));
             }
 
-            // 重置表单
             document.getElementById('activity').value = '';
             document.getElementById('duration').value = '';
-            document.getElementById('notes').value = '';
             hideForm();
-
             displayRecords();
         }
 
+        // 显示记录
         function displayRecords() {
             const list = document.getElementById('recordsList');
             
             if (records.length === 0) {
-                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div><div>还没有记录，开始行动吧！</div></div>';
+                list.innerHTML = '<div style="text-align: center; padding: 40px 20px; color: #ccc;">📝 还没有记录，开始行动吧！</div>';
                 return;
             }
 
             const sortedRecords = [...records].sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
-            
             list.innerHTML = sortedRecords.map(record => {
                 const theme = record.theme === 'move' ? '🏃' : '📖';
                 const date = new Date(record.date).toLocaleDateString('zh-CN');
                 return `
                     <div class="record-item">
-                        <div class="record-date">${theme} ${record.activity} · ${date}</div>
-                        ${record.duration ? `<div class="record-content">⏱️ ${record.duration} 分钟</div>` : ''}
-                        ${record.notes ? `<div class="record-content">💭 ${record.notes}</div>` : ''}
+                        <div><strong>${theme} ${record.activity}</strong> · ${date}</div>
+                        ${record.duration ? `<div>⏱️ ${record.duration} 分钟</div>` : ''}
                     </div>
                 `;
             }).join('');
         }
 
+        // 加载记录
         async function loadRecords() {
-            const saved = localStorage.getItem('minimo_records');
-            records = saved ? JSON.parse(saved) : [];
-            displayRecords();
-
-            // 从 Firebase 同步数据（如果用户已登录）
             if (currentUser) {
-                try {
-                    const snapshot = await firebase.database().ref(`users/${currentUser.uid}/records`).once('value');
-                    if (snapshot.exists()) {
-                        records = Object.values(snapshot.val());
-                        localStorage.setItem('minimo_records', JSON.stringify(records));
-                        displayRecords();
-                    }
-                } catch (error) {
-                    console.error('从 Firebase 加载失败:', error);
-                }
+                const saved = localStorage.getItem(`records_${currentUser.uid}`);
+                records = saved ? JSON.parse(saved) : [];
+                displayRecords();
             }
         }
 
-        async function handleLogout() {
-            if (confirm('确定要登出吗？')) {
-                try {
-                    await firebase.auth().signOut();
-                    localStorage.removeItem('minimo_user_email');
-                    currentUser = null;
-                    showAuth();
-                } catch (error) {
-                    alert('登出失败：' + error.message);
-                }
-            }
+        // UI 切换
+        function showAuth() {
+            document.getElementById('authContainer').style.display = 'flex';
+            document.getElementById('appContainer').classList.remove('active');
+        }
+
+        function showApp() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('appContainer').classList.add('active');
+            document.getElementById('userEmail').textContent = currentUser.email;
         }
 
         function showMessage(element, message, type) {
@@ -793,7 +476,9 @@
         }
 
         // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', initWhenReady);
+        window.addEventListener('load', () => {
+            checkAuthState();
+        });
     </script>
 </body>
 </html>
