@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiniMo 微行动 - Let it flow</title>
+    <title>MiniMo 微行动 - 极简行动记录工具</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -25,6 +25,7 @@
             width: 100%;
             max-width: 400px;
             padding: 20px;
+            display: flex;
         }
 
         .auth-card {
@@ -32,6 +33,7 @@
             border-radius: 12px;
             padding: 40px 30px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
         .auth-header {
@@ -49,7 +51,6 @@
         .auth-header p {
             font-size: 14px;
             color: #999;
-            font-style: italic;
         }
 
         .form-group {
@@ -133,39 +134,9 @@
             box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background: #f5f5f5;
-            color: #333;
-            border: 1px solid #ddd;
-        }
-
-        .btn-secondary:hover {
-            background: #efefef;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            gap: 10px;
-            color: #ccc;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #ddd;
-        }
-
-        .divider span {
-            font-size: 12px;
-            color: #999;
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .message {
@@ -198,20 +169,12 @@
             border: 1px solid #bee5eb;
         }
 
-        .loading {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #4a90e2;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .info-text {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #999;
+            line-height: 1.6;
         }
 
         /* ===== 应用界面样式 ===== */
@@ -262,7 +225,6 @@
             background: #ee5a52;
         }
 
-        /* 原有的应用样式 */
         .content {
             background: white;
             border-radius: 12px;
@@ -305,6 +267,13 @@
             margin-bottom: 16px;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        .action-prompt {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 500;
         }
 
         .action-button {
@@ -350,7 +319,6 @@
         }
 
         .form-field input,
-        .form-field select,
         .form-field textarea {
             width: 100%;
             padding: 10px 12px;
@@ -443,6 +411,7 @@
             .auth-card {
                 border-radius: 0;
                 box-shadow: none;
+                padding: 30px 20px;
             }
 
             .content {
@@ -464,8 +433,8 @@
             <div id="authMessage" class="message"></div>
 
             <div class="tabs">
-                <div class="tab active" data-tab="email-link">Email 链接</div>
-                <div class="tab" data-tab="email-password">密码登录</div>
+                <div class="tab active" data-tab="email-link" onclick="switchTab('email-link')">Email 链接</div>
+                <div class="tab" data-tab="email-password" onclick="switchTab('email-password')">密码登录</div>
             </div>
 
             <!-- Email 链接登录 -->
@@ -477,7 +446,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">发送登录链接</button>
                 </form>
-                <div style="text-align: center; margin-top: 16px; font-size: 12px; color: #999;">
+                <div class="info-text">
                     ℹ️ 我们会发送一个登录链接到你的邮箱<br>点击链接即可登录（24小时内有效）
                 </div>
             </div>
@@ -522,9 +491,7 @@
             <!-- 操作区域 -->
             <div class="action-section">
                 <div class="action-title">今日任务</div>
-                <div id="actionPrompt" class="action-title" style="font-size: 16px; text-transform: none; letter-spacing: 0; color: #333; margin-bottom: 20px;">
-                    穿上运动鞋，出门 5 分钟
-                </div>
+                <div id="actionPrompt" class="action-prompt">穿上运动鞋，出门 5 分钟</div>
                 <button class="action-button" onclick="showForm()">我完成了</button>
             </div>
 
@@ -558,15 +525,33 @@
         </div>
     </div>
 
-    <!-- Firebase SDK - 使用官方完整版本 -->
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebaseapp/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendSignInLinkToEmail, signInWithEmailLink, isSignInWithEmailLink, signOut } from "https://www.gstatic.com/firebaseapp/10.8.0/firebase-auth.js";
-        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebaseapp/10.8.0/firebase-database.js";
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebaseapp/10.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebaseapp/10.5.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebaseapp/10.5.0/firebase-database.js"></script>
 
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    <script>
+        // 等待 Firebase 加载完成
+        if (typeof firebase === 'undefined') {
+            console.error('Firebase SDK 未加载');
+        } else {
+            console.log('✅ Firebase SDK 已加载');
+        }
+    </script>
+
+    <script>
+        // 确保 Firebase 加载完成
+        function waitForFirebase() {
+            return new Promise((resolve) => {
+                if (typeof firebase !== 'undefined' && firebase.initializeApp) {
+                    resolve();
+                } else {
+                    setTimeout(waitForFirebase, 100);
+                }
+            });
+        }
+
+        // Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyA9pV_YMkJLjJPVnZ1KkU0Jc8eNZ-dGIG4",
             authDomain: "minimo-2025.firebaseapp.com",
@@ -578,68 +563,53 @@
             measurementId: "G-EW26GS6QLS"
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
-
-        // 将实例暴露到全局作用域供其他脚本使用
-        window.firebaseAuth = auth;
-        window.firebaseDB = db;
-        window.firebaseRef = ref;
-        window.firebaseSet = set;
-        window.firebaseGet = get;
-        window.firebaseChild = child;
-        window.firebaseOnAuthStateChanged = onAuthStateChanged;
-        window.firebaseCreateUserWithEmailAndPassword = createUserWithEmailAndPassword;
-        window.firebaseSignInWithEmailAndPassword = signInWithEmailAndPassword;
-        window.firebaseSendSignInLinkToEmail = sendSignInLinkToEmail;
-        window.firebaseSignInWithEmailLink = signInWithEmailLink;
-        window.firebaseIsSignInWithEmailLink = isSignInWithEmailLink;
-        window.firebaseSignOut = signOut;
-
-        console.log('✅ Firebase 初始化成功！');
-    </script>
-
-    <script>
-        // Firebase 全局引用（由模块脚本初始化）
-        let auth, db;
-        
-        // 等待 Firebase 初始化完成
-        function initializeFirebase() {
-            return new Promise((resolve) => {
-                const checkFirebase = () => {
-                    if (window.firebaseAuth && window.firebaseDB) {
-                        auth = window.firebaseAuth;
-                        db = window.firebaseDB;
-                        resolve();
-                    } else {
-                        setTimeout(checkFirebase, 100);
-                    }
-                };
-                checkFirebase();
-            });
-        }
-
         // 全局状态
         let currentUser = null;
         let currentTheme = 'move';
         let records = [];
 
+        // 初始化函数
+        async function initializeApp() {
+            await waitForFirebase();
+            
+            try {
+                firebase.initializeApp(firebaseConfig);
+                console.log('✅ Firebase 初始化成功');
+            } catch (error) {
+                console.log('ℹ️ Firebase 已初始化（可能重复调用）:', error.message);
+            }
+
+            // 检测登录状态
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('minimo_user_email', user.email);
+                    showApp();
+                    loadRecords();
+                } else {
+                    currentUser = null;
+                    showAuth();
+                }
+            });
+
+            // 处理 Email 链接登录
+            completeEmailLinkSignIn();
+
+            // 加载本地记录
+            const saved = localStorage.getItem('minimo_records');
+            records = saved ? JSON.parse(saved) : [];
+        }
+
         // ===== 登录逻辑 =====
 
-        // 标签页切换
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                
-                tab.classList.add('active');
-                document.getElementById(tab.dataset.tab).classList.add('active');
-            });
-        });
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
 
-        // Email 链接登录
         async function handleEmailLinkLogin(e) {
             e.preventDefault();
             const email = document.getElementById('emailLink').value;
@@ -653,7 +623,7 @@
             };
 
             try {
-                await window.firebaseSendSignInLinkToEmail(auth, email, actionCodeSettings);
+                await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings);
                 localStorage.setItem('emailForSignIn', email);
                 showMessage(messageEl, `✅ 登录链接已发送到 ${email}，请检查邮箱（包括垃圾邮件文件夹）`, 'success');
                 document.getElementById('emailLink').value = '';
@@ -662,7 +632,6 @@
             }
         }
 
-        // Email + 密码登录
         async function handlePasswordLogin(e) {
             e.preventDefault();
             const email = document.getElementById('emailPassword').value;
@@ -672,15 +641,13 @@
             showMessage(messageEl, '正在登录...', 'info');
 
             try {
-                const result = await window.firebaseCreateUserWithEmailAndPassword(auth, email, password);
-                currentUser = result.user;
+                await firebase.auth().createUserWithEmailAndPassword(email, password);
                 localStorage.setItem('minimo_user_email', email);
                 showApp();
             } catch (error) {
                 if (error.code === 'auth/email-already-in-use') {
                     try {
-                        const result = await window.firebaseSignInWithEmailAndPassword(auth, email, password);
-                        currentUser = result.user;
+                        await firebase.auth().signInWithEmailAndPassword(email, password);
                         localStorage.setItem('minimo_user_email', email);
                         showApp();
                     } catch (err) {
@@ -692,9 +659,8 @@
             }
         }
 
-        // 处理 Email 链接登录返回
         async function completeEmailLinkSignIn() {
-            if (window.firebaseIsSignInWithEmailLink(auth, window.location.href)) {
+            if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
                 let email = localStorage.getItem('emailForSignIn');
                 
                 if (!email) {
@@ -702,30 +668,14 @@
                 }
 
                 try {
-                    const result = await window.firebaseSignInWithEmailLink(auth, email, window.location.href);
+                    await firebase.auth().signInWithEmailLink(email, window.location.href);
                     localStorage.removeItem('emailForSignIn');
-                    currentUser = result.user;
                     localStorage.setItem('minimo_user_email', email);
                     window.location.href = 'https://minimo.pages.dev/';
                 } catch (error) {
                     alert('登录失败：' + error.message);
                 }
             }
-        }
-
-        // 检测登录状态
-        async function setupAuthStateListener() {
-            window.firebaseOnAuthStateChanged(auth, user => {
-                if (user) {
-                    currentUser = user;
-                    localStorage.setItem('minimo_user_email', user.email);
-                    showApp();
-                    loadRecords();
-                } else {
-                    currentUser = null;
-                    showAuth();
-                }
-            });
         }
 
         // ===== 应用逻辑 =====
@@ -780,12 +730,9 @@
             localStorage.setItem('minimo_records', JSON.stringify(records));
 
             // 保存到 Firebase
-            if (currentUser && db) {
+            if (currentUser) {
                 try {
-                    await window.firebaseSet(
-                        window.firebaseRef(db, `users/${currentUser.uid}/records/${record.timestamp}`),
-                        record
-                    );
+                    await firebase.database().ref(`users/${currentUser.uid}/records/${record.timestamp}`).set(record);
                 } catch (error) {
                     console.error('Firebase 保存失败:', error);
                 }
@@ -829,11 +776,9 @@
             displayRecords();
 
             // 从 Firebase 同步数据（如果用户已登录）
-            if (currentUser && db) {
+            if (currentUser) {
                 try {
-                    const snapshot = await window.firebaseGet(
-                        window.firebaseChild(window.firebaseRef(db), `users/${currentUser.uid}/records`)
-                    );
+                    const snapshot = await firebase.database().ref(`users/${currentUser.uid}/records`).once('value');
                     if (snapshot.exists()) {
                         records = Object.values(snapshot.val());
                         localStorage.setItem('minimo_records', JSON.stringify(records));
@@ -848,7 +793,7 @@
         async function handleLogout() {
             if (confirm('确定要登出吗？')) {
                 try {
-                    await window.firebaseSignOut(auth);
+                    await firebase.auth().signOut();
                     localStorage.removeItem('minimo_user_email');
                     currentUser = null;
                     showAuth();
@@ -863,22 +808,8 @@
             element.className = `message show ${type}`;
         }
 
-        // 初始化
-        window.addEventListener('load', async () => {
-            // 等待 Firebase 初始化
-            await initializeFirebase();
-            console.log('✅ Firebase 已就绪');
-
-            // 设置认证状态监听
-            setupAuthStateListener();
-
-            // 处理 Email 链接登录返回
-            completeEmailLinkSignIn();
-
-            // 加载本地记录
-            const saved = localStorage.getItem('minimo_records');
-            records = saved ? JSON.parse(saved) : [];
-        });
+        // 页面加载时初始化
+        window.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
 </html>
