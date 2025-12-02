@@ -525,59 +525,40 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebaseapp/10.5.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebaseapp/10.5.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebaseapp/10.5.0/firebase-database.js"></script>
+    <!-- Firebase SDK - 使用完整的官方 CDN -->
+    <script src="https://www.gstatic.com/firebaseapp/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebaseapp/9.23.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebaseapp/9.23.0/firebase-database.js"></script>
 
     <script>
-        // 等待 Firebase 加载完成
-        if (typeof firebase === 'undefined') {
-            console.error('Firebase SDK 未加载');
-        } else {
-            console.log('✅ Firebase SDK 已加载');
-        }
-    </script>
+        // 确保 Firebase 加载完成后才运行代码
+        function initWhenReady() {
+            if (typeof firebase === 'undefined' || !firebase.initializeApp) {
+                setTimeout(initWhenReady, 100);
+                return;
+            }
 
-    <script>
-        // 确保 Firebase 加载完成
-        function waitForFirebase() {
-            return new Promise((resolve) => {
-                if (typeof firebase !== 'undefined' && firebase.initializeApp) {
-                    resolve();
-                } else {
-                    setTimeout(waitForFirebase, 100);
-                }
-            });
-        }
+            // Firebase 配置
+            const firebaseConfig = {
+                apiKey: "AIzaSyA9pV_YMkJLjJPVnZ1KkU0Jc8eNZ-dGIG4",
+                authDomain: "minimo-2025.firebaseapp.com",
+                databaseURL: "https://minimo-2025-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "minimo-2025",
+                storageBucket: "minimo-2025.firebasestorage.app",
+                messagingSenderId: "618970302570",
+                appId: "1:618970302570:web:8bcde91811dadb8a1b2213"
+            };
 
-        // Firebase 配置
-        const firebaseConfig = {
-            apiKey: "AIzaSyA9pV_YMkJLjJPVnZ1KkU0Jc8eNZ-dGIG4",
-            authDomain: "minimo-2025.firebaseapp.com",
-            databaseURL: "https://minimo-2025-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "minimo-2025",
-            storageBucket: "minimo-2025.firebasestorage.app",
-            messagingSenderId: "618970302570",
-            appId: "1:618970302570:web:8bcde91811dadb8a1b2213",
-            measurementId: "G-EW26GS6QLS"
-        };
-
-        // 全局状态
-        let currentUser = null;
-        let currentTheme = 'move';
-        let records = [];
-
-        // 初始化函数
-        async function initializeApp() {
-            await waitForFirebase();
-            
             try {
                 firebase.initializeApp(firebaseConfig);
                 console.log('✅ Firebase 初始化成功');
             } catch (error) {
-                console.log('ℹ️ Firebase 已初始化（可能重复调用）:', error.message);
+                console.log('ℹ️ Firebase 可能已初始化');
             }
+
+            // 加载本地记录
+            const saved = localStorage.getItem('minimo_records');
+            records = saved ? JSON.parse(saved) : [];
 
             // 检测登录状态
             firebase.auth().onAuthStateChanged(user => {
@@ -593,12 +574,15 @@
             });
 
             // 处理 Email 链接登录
-            completeEmailLinkSignIn();
-
-            // 加载本地记录
-            const saved = localStorage.getItem('minimo_records');
-            records = saved ? JSON.parse(saved) : [];
+            if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
+                completeEmailLinkSignIn();
+            }
         }
+
+        // 全局状态
+        let currentUser = null;
+        let currentTheme = 'move';
+        let records = [];
 
         // ===== 登录逻辑 =====
 
@@ -629,6 +613,7 @@
                 document.getElementById('emailLink').value = '';
             } catch (error) {
                 showMessage(messageEl, `❌ 发送失败：${error.message}`, 'error');
+                console.error(error);
             }
         }
 
@@ -655,26 +640,25 @@
                     }
                 } else {
                     showMessage(messageEl, `❌ ${error.message}`, 'error');
+                    console.error(error);
                 }
             }
         }
 
         async function completeEmailLinkSignIn() {
-            if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
-                let email = localStorage.getItem('emailForSignIn');
-                
-                if (!email) {
-                    email = prompt('请输入你的邮箱地址：');
-                }
+            let email = localStorage.getItem('emailForSignIn');
+            
+            if (!email) {
+                email = prompt('请输入你的邮箱地址：');
+            }
 
-                try {
-                    await firebase.auth().signInWithEmailLink(email, window.location.href);
-                    localStorage.removeItem('emailForSignIn');
-                    localStorage.setItem('minimo_user_email', email);
-                    window.location.href = 'https://minimo.pages.dev/';
-                } catch (error) {
-                    alert('登录失败：' + error.message);
-                }
+            try {
+                await firebase.auth().signInWithEmailLink(email, window.location.href);
+                localStorage.removeItem('emailForSignIn');
+                localStorage.setItem('minimo_user_email', email);
+                window.location.href = 'https://minimo.pages.dev/';
+            } catch (error) {
+                alert('登录失败：' + error.message);
             }
         }
 
@@ -809,7 +793,7 @@
         }
 
         // 页面加载时初始化
-        window.addEventListener('DOMContentLoaded', initializeApp);
+        document.addEventListener('DOMContentLoaded', initWhenReady);
     </script>
 </body>
 </html>
